@@ -1,5 +1,4 @@
 # Importing necessary libraries
-import os 
 import json
 
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
@@ -46,13 +45,17 @@ class Parser():
                 else:
                     entries[row.split(',')[idx_variable_location]] = values
 
-        json_output = json.dumps(entries)
-
+        entries = str(entries).replace("'", '"')
+        strentries = ""
+        for pc, cc, nc in zip(entries, entries[1:], entries[2:]):
+            if cc == '"' and pc.isalnum() and nc.isalnum(): # hvis en karakter følger og efterfølges af en alfanumerisk karakter (ikke mellemrum), ændrer tegnet (antag at tegnet er indeni tekst)
+                strentries += "'"
+            else:
+                strentries += cc    
         with open(self.output_file_path, "w") as file:
-            file.write(json_output)
-
+             file.write(strentries)
             
 if __name__ == "__main__": # sørger for at koden ikke executes når den blot importeres som modul
-    parser = Parser("data/employees.ascii.csv", output_file_path="outputs/employees.json", ignore_placeholder=False)
+    parser = Parser("data/employees.ascii.csv", output_file_path="outputs/employees_per_email.json", ignore_placeholder=False, index_variable="email")
     parser.parse_to_JSON()
 
