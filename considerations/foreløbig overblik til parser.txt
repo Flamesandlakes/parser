@@ -18,3 +18,16 @@ skriv et program, som...
 **hvordan adskiller det sig fra det forrige trin? A: datastrukturen behøver ikke at være json.
 ***dataframe har jeg nok arbejdet mest med, og er også relevant for data engineering, men for ETL er hashmap nok endnu mere oplagt (og en tilsvarende udfordring).
 
+
+test cases:
+
+- ikke-eksisterende input fil
+- input fil er ikke .csv
+- input fil er en .csv med manglende data / forskellige antal af værdier påtværs af rækkerne
+- index variablen er ikke i header
+- index variablen indgår kun delvist (substring) i header
+- output filen eksisterer allerede (overvej: fint nok blot at erstatte?)
+- files with special/unique characters
+
+
+
