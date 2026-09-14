@@ -1,9 +1,9 @@
 Parser
 
 research:
-- CSV-formatteret tekststreng; A: antager at det er den måde tekst er gemt i CSV
+- CSV-formateret tekststreng; A: antager at det er den måde tekst er gemt i CSV
 - UML-diagram: Unified Modeling Language; A: overblik over software/systemer, ift hvordan det hænger sammen. Diagram brugt til at kommunikere dette visuelt.
-- enhedstest og "dækning"
+- enhedstest og "dækning"; A: dækning = mængden af koden som executes
 - overblik over alle (relevante) datastrukturer; A: dataframe***, liste, dict/hashmap, stack?, tree?, netværksnoder/graf?
 
 opg:
@@ -16,4 +16,5 @@ skriv et program, som...
 
 *spørgsmål hvorvidt bør være dynamisk baseret på selve strengen, eller skal være hardcoded som ~dataframe?
 **hvordan adskiller det sig fra det forrige trin? A: datastrukturen behøver ikke at være json.
-***nok mest relevant, for data engineering
+***dataframe har jeg nok arbejdet mest med, og er også relevant for data engineering, men for ETL er hashmap nok endnu mere oplagt (og en tilsvarende udfordring).
+
