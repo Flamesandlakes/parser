@@ -1,0 +1,19 @@
+Parser
+
+research:
+- CSV-formatteret tekststreng; A: antager at det er den måde tekst er gemt i CSV
+- UML-diagram: Unified Modeling Language; A: overblik over software/systemer, ift hvordan det hænger sammen. Diagram brugt til at kommunikere dette visuelt.
+- enhedstest og "dækning"
+- overblik over alle (relevante) datastrukturer; A: dataframe***, liste, dict/hashmap, stack?, tree?, netværksnoder/graf?
+
+opg:
+skriv et program, som...
+- tager csv-formatteret tekststreng som input 
+	- først, direkte input
+	- i sidste ende, indlæs strengen fra en fil
+- parser* dette input til en passende datastruktur
+- output af input i form af JSON**
+
+*spørgsmål hvorvidt bør være dynamisk baseret på selve strengen, eller skal være hardcoded som ~dataframe?
+**hvordan adskiller det sig fra det forrige trin? A: datastrukturen behøver ikke at være json.
+***nok mest relevant, for data engineering
