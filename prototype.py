@@ -1,22 +1,18 @@
-# Importing necessary libraries
-import json
 
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
 class Parser():
-    def __init__(self, input_file_path, output_file_path="outputs/placeholder.json", ignore_placeholder=False):
+    def __init__(self, input_file_path=None, output_file_path="outputs/placeholder.json", use_placeholder=False):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
-        # NOTE: DEPRECATED
-            # index_variable is the index variable to be used for the JSON output. If None, unique numbers will be used.
-        # ignore_placeholder is a boolean indicating whether to ignore the use of the placeholder output file path. 
+        # use_placeholder is a boolean indicating whether to ignore the use of the placeholder output file path. 
             # If False, the user will be prompted to enter a output file path. If False, the placeholder path will just be used.
 
         self.input_file_path = input_file_path
         self.output_file_path = output_file_path
-        #self.index_variable = index_variable
-        self.ignore_placeholder = ignore_placeholder
         
+        self.ignore_placeholder = use_placeholder
+
 
         if self.output_file_path == "outputs/placeholder":
                     self.output_file_path = input("Please enter the output file path (must end with .json): ")
@@ -24,8 +20,15 @@ class Parser():
                         print("Typo assumed, appending .json to the output file path.")
                         self.output_file_path += ".json"
 
-    def load_file(self):
-        with open(self.input_file_path, "r") as file:
+    def load_file(self, input_file_path=None):
+        # update the input_file_path if provided as an argument
+        if input_file_path is not None:
+            self.input_file_path = input_file_path
+
+        if self.input_file_path is None:
+            raise ValueError("Input file path is not set. Please provide a valid input file path.")  
+
+        with open(self.input_file_path, "r", encoding = "utf-8") as file:
             content = file.read()
             self.file_content = content
 
@@ -78,7 +81,7 @@ class Parser():
         
             
 if __name__ == "__main__": # sørger for at koden ikke executes når den blot importeres som modul
-    parser = Parser("data/employees.ascii.csv", output_file_path="outputs/employees_2.json", ignore_placeholder=False)
+    parser = Parser("data/employees.ascii.csv", output_file_path="outputs/employees_2.json", use_placeholder=False)
     parser.parse_to_JSON()
 
 
