@@ -45,11 +45,20 @@ class TestParser(unittest.TestCase):
         parser.load_file()
         self.assertEqual(parser.file_content, "simpel kinesisk: 汉字, traditionel kinesisk: 漢字, japansk kanji: 漢字, koreansk hanja: 漢字, koreansk hangul: 한자, bulgarisk (pythonslange): питон, arabisk (pythonslange): بايثون")
     
+    # test to 
+    ## headerless csv
 
     
+    def test_to_array_of_dicts(self):
+        ## unequal length
+        parser = prototype.Parser()
+        array = parser.to_array_of_dicts("name,species,department,salary,office\nOl'MacDonald,human,production,38000,The Farmhouse")
+        self.assertEqual(array, [{"name":"Ol'MacDonald", "species":"human", "department":"production","salary":'38000',"office":"The Farmhouse"}])
 
-    # test to json
-    ## headerless csv
+        ## unequal length across multiple entries (both too few, and too many values)
+        array = parser.to_array_of_dicts("name,species,department,salary\nOl'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn")
+        self.assertEqual(array, [{"name":"Ol'MacDonald", "species":"human", "department":"production"}, 
+                                 {"name":"Mervin", "species":"cat", "department":"security", "salary":"treats and pets"}]) 
 
     # test stringify
     def test_stringify_entries(self):
@@ -57,13 +66,18 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parser.stringify_entries([{"a": 1, "b": 2}, {"a": 3, "b": 4}]), 
                          '[{"a": 1, "b": 2}, {"a": 3, "b": 4}]')
 
+        # special characters + apostrophe
         self.assertEqual(parser.stringify_entries([{"slægt": "O'Malley"}]), 
                          '[{"slægt": "O\'Malley"}]')
 
+        # nested dict
         self.assertEqual(parser.stringify_entries({"example": {'dictionary': 'British edition'}}), 
                          '["example": {"dictionary": "British edition"}]')
 
-        # self.assertEqual(parser.stringify_entries({"example": 'dictionary: British edition'}), '[{"example": "dictionary: British edition"}]')
+        # pseudo-nested dict
+        self.assertEqual(parser.stringify_entries({"example": 'dictionary: British edition'}), 
+                         '["example": "dictionary: British edition"]')
+        # '[{"example": "dictionary: British edition"}]')
 
 
 
@@ -75,3 +89,8 @@ class TestParser(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    parser = prototype.Parser()
+    array = parser.to_array_of_dicts("name,species,department,office\nOl'MacDonald,human,production\nMuffin,dog,support,treats,Yard,England")
+    print(array)
+    #print([{"name":"Ol'MacDonald", "species":"human", "department":"production","salary":'38000',"office":"The Farmhouse"}])

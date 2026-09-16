@@ -2,7 +2,7 @@
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
 class Parser():
-    def __init__(self, input_file_path=None, output_file_path="outputs/placeholder.json", assigned_headers = [], use_placeholder=False):
+    def __init__(self, input_file_path:str = None, output_file_path:str= "outputs/placeholder.json", assigned_headers = [], use_placeholder=False):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
         # assigned_headers is a list of strings to use for each column. Passing anything but None or an empty list makes this program assumes there is no header.
@@ -32,20 +32,22 @@ class Parser():
             content = file.read()
             self.file_content = content
 
-    def to_array_of_dicts(self):
-    
+    def to_array_of_dicts(self, content = None):
+        if content is None:
+            content = self.content
+        
         #headers = [head.strip() for head in self.file_content.split('\n')[0].split(',')]
 
-        if self.assigned_headers: # if assigned_headers
+        if self.assigned_headers: # if assigned_headers, assign them
             headers = self.assigned_headers
-            rows = [line for line in self.file_content.splitlines() if line]
-        else:
-            headers = [head.strip() for head in self.file_content.splitlines()[0].split(',')]
-            rows = [line for line in self.file_content.splitlines()[1:] if line]
+            rows = [line for line in content.splitlines() if line]
+        else: # otherwise assign the first row as the headers
+            headers = [head.strip() for head in content.splitlines()[0].split(',')]
+            rows = [line for line in content.splitlines()[1:] if line]
 
         entries = [] # init list til at holde entries
         
-        for row in enumerate(rows):
+        for _, row in enumerate(rows):
             values = {head: value for head, value in zip(headers, row.split(','))} # find værdierne for det givne index, opstillet som dict (inkl. eventuel index selv)
             entries.append(values)
 
@@ -68,7 +70,7 @@ class Parser():
 
     def parse_to_JSON(self):
         self.load_file()
-        entries = self.to_array_of_dicts()
+        entries = self.to_array_of_dicts(self.file_content)
         entries_str = self.stringify_entries(entries)
         self.export(entries_str)
 
