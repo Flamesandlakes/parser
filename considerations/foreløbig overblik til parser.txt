@@ -14,7 +14,7 @@ skriv et program, som...
 - parser* dette input til en passende datastruktur
 - output af input i form af JSON**
 
-*spørgsmål hvorvidt bør være dynamisk baseret på selve strengen, eller skal være hardcoded som ~dataframe?
+*spørgsmål hvorvidt bør være dynamisk baseret på selve strengen, eller skal være hardcoded som ~matrix?
 **hvordan adskiller det sig fra det forrige trin? A: datastrukturen behøver ikke at være json.
 ***dataframe har jeg nok arbejdet mest med, og er også relevant for data engineering, men for ETL er hashmap nok endnu mere oplagt (og en tilsvarende udfordring).
 
@@ -28,6 +28,14 @@ test cases:
 - index variablen indgår kun delvist (substring) i header
 - output filen eksisterer allerede (overvej: fint nok blot at erstatte?)
 - files with special/unique characters
+
+todo/plan:
+- genbesøg bilag
+- tilføj load method
+- research enhedstest og package for python
+- alnum til spaces
+- dict of dicts til array of dicts (fjern index funktionalitet)
+- ... tjek hvorvidt resulterende json stadig har "End of file expected" error.
 
 
 
