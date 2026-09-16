@@ -2,17 +2,17 @@
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
 class Parser():
-    def __init__(self, input_file_path=None, output_file_path="outputs/placeholder.json", use_placeholder=False):
+    def __init__(self, input_file_path=None, output_file_path="outputs/placeholder.json", assigned_headers = [], use_placeholder=False):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
+        # assigned_headers is a list of strings to use for each column. Passing anything but None or an empty list makes this program assumes there is no header.
         # use_placeholder is a boolean indicating whether to ignore the use of the placeholder output file path. 
             # If False, the user will be prompted to enter a output file path. If False, the placeholder path will just be used.
 
         self.input_file_path = input_file_path
         self.output_file_path = output_file_path
-        
+        self.assigned_headers = assigned_headers
         self.ignore_placeholder = use_placeholder
-
 
         if self.output_file_path == "outputs/placeholder":
                     self.output_file_path = input("Please enter the output file path (must end with .json): ")
@@ -32,36 +32,27 @@ class Parser():
             content = file.read()
             self.file_content = content
 
-    def to_JSON(self):
+    def to_array_of_dicts(self):
     
-        headers = [head.strip() for head in self.file_content.split('\n')[0].split(',')]
-        # # if self.index_variable is not None and self.index_variable not in headers:
-        # #     raise ValueError(f"Index variable '{self.index_variable}' not found in headers: {headers}")
-        # # elif self.index_variable is not None:
-        # #     idx_variable_location = headers.index(self.index_variable) 
+        #headers = [head.strip() for head in self.file_content.split('\n')[0].split(',')]
 
-        rows = [line for line in self.file_content.split('\n')[1:] if line]
+        if self.assigned_headers: # if assigned_headers
+            headers = self.assigned_headers
+            rows = [line for line in self.file_content.splitlines() if line]
+        else:
+            headers = [head.strip() for head in self.file_content.splitlines()[0].split(',')]
+            rows = [line for line in self.file_content.splitlines()[1:] if line]
 
-        # entries = {} # init dict til at holde entries #NOTE: DEPRECATED
         entries = [] # init list til at holde entries
         
-        for idx, row in enumerate(rows):
+        for row in enumerate(rows):
             values = {head: value for head, value in zip(headers, row.split(','))} # find værdierne for det givne index, opstillet som dict (inkl. eventuel index selv)
             entries.append(values)
 
-            # # NOTE: DEPRECATED CODE BELOW
-            # # if self.index_variable is None:
-            # #     entries[idx] = values
-            # # else:
-            # #     entries[row.split(',')[idx_variable_location]] = values
+    
+        return entries
 
-        entries_str = self.stringify_entries(entries)
-
-        with open(self.output_file_path, "w") as file:
-                    file.write(entries_str)
-                    #file.write(str(entries).replace("'", '"'))
-
-    def stringify_entries(self, entries):
+    def stringify_entries(self, entries: list) -> str:
         entries = str(entries).replace("'", '"')
         entries_str = ""
         for pc, cc, nc in zip(entries, entries[1:], entries[2:]):
@@ -77,7 +68,10 @@ class Parser():
 
     def parse_to_JSON(self):
         self.load_file()
-        self.to_JSON()
+        entries = self.to_array_of_dicts()
+        entries_str = self.stringify_entries(entries)
+        self.export(entries_str)
+
         
             
 if __name__ == "__main__": # sørger for at koden ikke executes når den blot importeres som modul
