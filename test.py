@@ -1,4 +1,5 @@
 import unittest
+from unittest import mock # patch, call, mock_open
 import coverage
 from prototype import Parser
 
@@ -79,9 +80,7 @@ class TestParser(unittest.TestCase):
         array = parser.to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
                                          ["navn", "art", "ansvarsområde", "løn", "opholdsområde"])
         self.assertEqual(array, [{"navn":"Ol'MacDonald", "art":"human", "ansvarsområde":"production","løn":'38000',"opholdsområde":"The Farmhouse"}])
-        
-        
-        
+            
         
     # test stringify
     def test_stringify_entries(self):
@@ -102,7 +101,18 @@ class TestParser(unittest.TestCase):
                          '["example": "dictionary: British edition"]')
         # '[{"example": "dictionary: British edition"}]')
 
-
+    # test export
+    def test_export(self):
+        parser = Parser()
+        with mock.patch("builtins.open") as mockery:
+            parser.export("the very best string", "mockup.txt")
+        mockery.assert_has_calls([mock.call("mockup.txt", "w", encoding="utf-8"),
+                                  mock.call().__enter__(),
+                                  mock.call().__enter__().write("the very best string"),
+                                  mock.call().__exit__(None, None, None)])
+        
+    
+    
 
     # test parse method (eller måske ikke nødv hvis load og to_json er testet)
 

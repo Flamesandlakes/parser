@@ -65,7 +65,7 @@ class Parser():
         entries_str = "["+entries_str+"]"
         return entries_str
 
-    def export(self, content, output_file_path = None, file_extension = ".json"):
+    def export(self, content, output_file_path = None):
         
         if output_file_path is not None:
             self.output_file_path = output_file_path
@@ -77,7 +77,7 @@ class Parser():
         self.load_file()
         entries = self.to_array_of_dicts(self.file_content)
         entries_str = self.stringify_entries(entries)
-        self.export(entries_str)
+        self.export(entries_str, self.output_file_path)
 
         
             
