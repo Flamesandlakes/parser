@@ -55,7 +55,7 @@ class Parser():
     
         return entries
 
-    def __content_seperator_marker(self, string:str, seperator = ",", quotation_marks = ["'", '"']):
+    def _content_seperator_marker(self, string:str, seperator = ",", quotation_marks = ["'", '"']):
         
         #quote_tracker = {mark: False for mark in quotation_marks}
         
@@ -94,7 +94,7 @@ class Parser():
         return result_string, unique_placeholder
                 
     
-    def __stringify_entries(self, entries: list) -> str:
+    def _stringify_entries(self, entries: list) -> str:
         entries = str(entries).replace("'", '"')
         entries_str = ""
         for pc, cc, nc in zip(entries, entries[1:], entries[2:]):

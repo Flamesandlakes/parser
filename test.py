@@ -85,19 +85,19 @@ class TestParser(unittest.TestCase):
     # test stringify
     def test_stringify_entries(self):
         parser = Parser()
-        self.assertEqual(parser.__stringify_entries([{"a": 1, "b": 2}, {"a": 3, "b": 4}]), 
+        self.assertEqual(parser._stringify_entries([{"a": 1, "b": 2}, {"a": 3, "b": 4}]), 
                          '[{"a": 1, "b": 2}, {"a": 3, "b": 4}]')
 
         # special characters + apostrophe
-        self.assertEqual(parser.__stringify_entries([{"slægt": "O'Malley"}]), 
+        self.assertEqual(parser._stringify_entries([{"slægt": "O'Malley"}]), 
                          '[{"slægt": "O\'Malley"}]')
 
         # nested dict
-        self.assertEqual(parser.__stringify_entries({"example": {'dictionary': 'British edition'}}), 
+        self.assertEqual(parser._stringify_entries({"example": {'dictionary': 'British edition'}}), 
                          '["example": {"dictionary": "British edition"}]')
 
         # pseudo-nested dict
-        self.assertEqual(parser.__stringify_entries({"example": 'dictionary: British edition'}), 
+        self.assertEqual(parser._stringify_entries({"example": 'dictionary: British edition'}), 
                          '["example": "dictionary: British edition"]')
         # '[{"example": "dictionary: British edition"}]')
 
