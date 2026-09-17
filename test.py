@@ -1,5 +1,5 @@
 import unittest
-#import coverage
+import coverage
 import prototype
 
 
@@ -90,7 +90,7 @@ class TestParser(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-    parser = prototype.Parser()
-    array = parser.to_array_of_dicts("name,species,department,office\nOl'MacDonald,human,production\nMuffin,dog,support,treats,Yard,England")
-    print(array)
+    # parser = prototype.Parser()
+    # array = parser.to_array_of_dicts("name,species,department,office\nOl'MacDonald,human,production\nMuffin,dog,support,treats,Yard,England")
+    # print(array)
     #print([{"name":"Ol'MacDonald", "species":"human", "department":"production","salary":'38000',"office":"The Farmhouse"}])
