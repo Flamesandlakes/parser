@@ -2,6 +2,10 @@
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
 class Parser():
+    seperator_placeholders = ["|", "//", "***", "[P]", "[PH]", "[_UNIQUE__PLACEHOLDER_]",
+                              "gxOzlNQvKr","qkz08JWUIr","GC09mxT537","hsJzOlFHFu","QGwFStDLWH","xxemaNuMRL","a2GywH2k7E","KOomQhm0LO"]
+    
+    
     def __init__(self, input_file_path:str = None, output_file_path:str = None, assigned_headers = [], use_placeholder=False):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
@@ -51,7 +55,46 @@ class Parser():
     
         return entries
 
-    def stringify_entries(self, entries: list) -> str:
+    def __content_seperator_marker(self, string:str, seperator = ",", quotation_marks = ["'", '"']):
+        
+        #quote_tracker = {mark: False for mark in quotation_marks}
+        
+        unique_placeholder = None
+        for sp in Parser.seperator_placeholders:
+            if sp not in string:
+                unique_placeholderplaceholder = sp
+                break
+        
+        current_mark = None
+        in_quote = False
+        
+        result_string = ""
+        
+        for chr in string:
+            if chr not in quotation_marks and chr != seperator: # eval the most common condition first
+                result_string += chr
+            
+            elif chr in quotation_marks:
+                if current_mark == None:# and in_quote == False: # beginning of quotation
+                    current_mark = chr
+                    #in_quote = True
+                    result_string += chr
+                elif current_mark == chr:# and in_quote == True: # end of quotation
+                    current_mark = None
+                    #in_quote = False
+                    result_string += chr
+                else: # other quotation mark inside existing quotation marks
+                    result_string += chr
+            elif chr == seperator and current_mark is None:
+                result_string += unique_placeholder
+                
+            else: # seperator but inside a quote
+                result_string += chr
+        
+        return result_string, unique_placeholder
+                
+    
+    def __stringify_entries(self, entries: list) -> str:
         entries = str(entries).replace("'", '"')
         entries_str = ""
         for pc, cc, nc in zip(entries, entries[1:], entries[2:]):
@@ -76,7 +119,7 @@ class Parser():
     def parse_to_JSON(self):
         self.load_file()
         entries = self.to_array_of_dicts(self.file_content)
-        entries_str = self.stringify_entries(entries)
+        entries_str = self.__stringify_entries(entries)
         self.export(entries_str, self.output_file_path)
 
         
