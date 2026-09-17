@@ -14,21 +14,12 @@ skriv et program, som...
 - parser* dette input til en passende datastruktur
 - output af input i form af JSON**
 
-
-test cases:
-
-- ikke-eksisterende input fil
-- input fil er ikke .csv
-- input fil er en .csv med manglende data / forskellige antal af værdier påtværs af rækkerne
-- index variablen er ikke i header
-- index variablen indgår kun delvist (substring) i header
-- output filen eksisterer allerede (overvej: fint nok blot at erstatte?)
-- files with special/unique characters
-
 todo/plan:
 - tests for manglende coverage
 - in-quote comma handling
 - UML-graf (jetUML?)
+- opdel Parser i flere classes: file manager (load + export), parsing (stringify + to_json)
+- opdater test ud fra nye classes
 
 
 

@@ -2,7 +2,7 @@
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
 class Parser():
-    def __init__(self, input_file_path:str = None, output_file_path:str= "outputs/placeholder.json", assigned_headers = [], use_placeholder=False):
+    def __init__(self, input_file_path:str = None, output_file_path:str = None, assigned_headers = [], use_placeholder=False):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
         # assigned_headers is a list of strings to use for each column. Passing anything but None or an empty list makes this program assumes there is no header.
@@ -13,12 +13,6 @@ class Parser():
         self.output_file_path = output_file_path
         self.assigned_headers = assigned_headers
         self.ignore_placeholder = use_placeholder
-
-        if self.output_file_path == "outputs/placeholder":
-                    self.output_file_path = input("Please enter the output file path (must end with .json): ")
-                    if self.output_file_path.endswith(".json") == False:
-                        print("Typo assumed, appending .json to the output file path.")
-                        self.output_file_path += ".json"
 
     def load_file(self, input_file_path=None):
         # update the input_file_path if provided as an argument
@@ -32,11 +26,14 @@ class Parser():
             content = file.read()
             self.file_content = content
 
-    def to_array_of_dicts(self, content = None):
-        if content is None:
-            content = self.content
+    def to_array_of_dicts(self, content:str = None, assigned_headers = []):
+        # NOTE: by passing a list to the assigned_headers argument, it is assumed that there is no existing header in the data itself
         
-        #headers = [head.strip() for head in self.file_content.split('\n')[0].split(',')]
+        if content is None:
+            content = self.file_content
+        
+        if assigned_headers:
+            self.assigned_headers = assigned_headers    
 
         if self.assigned_headers: # if assigned_headers, assign them
             headers = self.assigned_headers
@@ -68,6 +65,14 @@ class Parser():
         entries_str = "["+entries_str+"]"
         return entries_str
 
+    def export(self, content, output_file_path = None, file_extension = ".json"):
+        
+        if output_file_path is not None:
+            self.output_file_path = output_file_path
+        
+        with open(self.output_file_path, "w", encoding = "utf-8") as file:
+            file.write(content)
+                
     def parse_to_JSON(self):
         self.load_file()
         entries = self.to_array_of_dicts(self.file_content)
@@ -76,7 +81,7 @@ class Parser():
 
         
             
-if __name__ == "__main__": # sørger for at koden ikke executes når den blot importeres som modul
+if __name__ == "__main__": # pragma: no cover # sørger for at koden ikke executes når den blot importeres som modul
     parser = Parser("data/employees.ascii.csv", output_file_path="outputs/employees_2.json", use_placeholder=False)
     parser.parse_to_JSON()
 
