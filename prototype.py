@@ -55,14 +55,8 @@ class Parser():
     
         return entries
 
-    def _content_seperator_marking(self, string:str, seperator:str, quotation_marks:list):#seperator = ",", quotation_marks = ["'", '"']):
+    def _content_seperator_marking(self, string:str, seperator:str, quotation_marks:list):
 
-        # def reverse_eval(string:str, do_reverse:bool):
-        #     if do_reverse:
-        #         return string[::-1]
-        #     else:
-        #         return string
-        
         unique_placeholder = None
         for sp in Parser.seperator_placeholders:
             if sp not in string:
@@ -94,7 +88,7 @@ class Parser():
                     quote_string += chr
 
                 else: # pragma: no cover
-                    print("Error; The condition for this print statement should never be met. #A") # error catcher
+                    print("Error: The condition for this print statement should never be met. #A") # error catcher
 
             else: # (chr in quotation_marks or chr == seperator) and current_mark != None, ie. inside quote
                 if chr == seperator:
@@ -108,52 +102,20 @@ class Parser():
                         marked_string += quote_string
                         quote_string = ""
                         marked_string += chr
-                    else: # quotation mark but not for curren quote
+                    else: # quotation mark but not for current quote
                         quote_string += chr
-                else:
-                    quote_string += chr
+                else: # pragma: no cover
+                    print("Error: The condition for this print statement should never be met. #B") # error catcher
 
-        #print(marked_string)
         marked_string += quote_string
         return marked_string, unique_placeholder
-            # ##
-            # elif chr in quotation_marks:
-            #     if current_mark == None:# and in_quote == False: # beginning of quotation
-            #         current_mark = chr
-                    
-            #         quote_string += chr
-
-            #     elif current_mark == chr:# and in_quote == True: # end of quotation
-            #         current_mark = None
-            #         quote_string = quote_string.replace(unique_placeholder, seperator)
-                    
-            #         marked_string += quote_string
-            #         quote_string = ""
-            #         marked_string += chr
-            #     else: # other quotation mark inside existing quotation marks
-            #         marked_string += chr
-
-            # elif chr == seperator and current_mark is None:
-            #     marked_string += unique_placeholder
-                
-            # elif : # seperator but inside a quote
-            #     #marked_string += chr
-            #     quote_string += unique_placeholder
-
         
 
-    def _informed_seperation(self, string:str, seperator:str, quotation_marks:list) -> list: #seperator = ",", quotation_marks = ["'", '"']) -> list:
+    def _informed_seperation(self, string:str, seperator:str, quotation_marks:list) -> list: 
 
-        marked_string, unique_placeholder = self._content_seperator_marking(string, seperator, quotation_marks)
-        # marked_string_reversed, unique_placeholder_for_rev = self._content_seperator_marking(string[::-1], seperator, quotation_marks) 
+        marked_string, unique_placeholder = self._content_seperator_marking(string, seperator, quotation_marks) # take the marked string and the selected placeholder
 
-        # if unique_placeholder != unique_placeholder_for_rev: # pragma: no cover
-        #     raise NotImplementedError("Error: The mirrored versions of the generated placeholders does not match.")
-
-        # if marked_string != marked_string_reversed[::-1]:
-        #     for chr in 
-
-        return marked_string.split(unique_placeholder)
+        return marked_string.split(unique_placeholder) # and split the string on the placeholder used a
 
     #def _
     
@@ -171,7 +133,7 @@ class Parser():
         entries_str = "["+entries_str+"]"
         return entries_str
 
-    def export(self, content, output_file_path = None): #pragma: no cover
+    def _export(self, content, output_file_path = None): 
         
         if output_file_path is not None:
             self.output_file_path = output_file_path
@@ -179,22 +141,23 @@ class Parser():
         with open(self.output_file_path, "w", encoding = "utf-8") as file:
             file.write(content)
                 
-    def parse_to_JSON(self):
+    def parse_to_JSON(self, output_file_path = None):
+        if output_file_path is not None:
+            self.output_file_path = output_file_path
+
         self.load_file()
         entries = self.text_to_array_of_dicts(self.file_content)
         entries_str = self._stringify_entries(entries)
-        self.export(entries_str, self.output_file_path)
+        self._export(entries_str, self.output_file_path)
 
         
             
 if __name__ == "__main__": # pragma: no cover # sørger for at koden ikke executes når den blot importeres som modul
-    #parser = Parser("data/employees.ascii.csv", output_file_path="outputs/employees_2.json", use_placeholder=False)
-    #parser.parse_to_JSON()
-    # parser = Parser()
-    # array = parser.text_to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
-    #                                         ["navn", "art", "ansvarsområde", "løn", "opholdsområde"], quotation_marks= [""])
     parser = Parser()
-    # unequal length across multiple entries (both too few, and too many values)
     array = parser.text_to_array_of_dicts("name,species,department,salary\nOl'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn")
     print(array)   
+
+    parser = Parser("data/test_data_056.csv", "mockup.csv")
+    parser.parse_to_JSON()
+
 

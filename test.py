@@ -5,55 +5,80 @@ from prototype import Parser
 
 
 class TestParser(unittest.TestCase):
-    def test_load_file(self):
+    def test_load_file_A(self):
         # simple case
         parser = Parser("data/test_data_001.csv")
         parser.load_file()
         self.assertEqual(parser.file_content, "x,y,z")
 
-    def test_load_file_with_special_characters(self):
+    def test_load_file_B(self):
         # unique characters
         parser = Parser("data/test_data_002.csv")
         parser.load_file()
         self.assertEqual(parser.file_content, "region,område,præst,mødested")
 
-    def test_load_file_with_no_file(self):
+    def test_load_file_C(self):
         # no file
         parser = Parser("data/DoesNotExist.csv")
         with self.assertRaises(FileNotFoundError):
             parser.load_file()
 
-    def test_load_with_no_file_defined(self):
+    def test_load_file_D(self):
         # no file defined
         parser = Parser()
         with self.assertRaises(ValueError):
             parser.load_file()
 
-    def test_load_with_text_file(self):
+    def test_load_file_E(self):
         # text file
         parser = Parser("data/test_data_003.txt")
         parser.load_file()
         self.assertEqual(parser.file_content, "lopus segnum le terra roma via ve e")
 
-    def test_load_with_empty_file(self):
+    def test_load_file_F(self):
         # empty file
         parser = Parser("data/test_data_004.csv")
         parser.load_file()
         self.assertEqual(parser.file_content, "")
 
-    def test_load_file_with_foreign_alphabets(self):
+    def test_load_file_G(self):
+        # foreign characters
         parser = Parser("data/test_data_005.csv")
         parser.load_file()
         self.assertEqual(parser.file_content, "simpel kinesisk: 汉字, traditionel kinesisk: 漢字, japansk kanji: 漢字, koreansk hanja: 漢字, koreansk hangul: 한자, bulgarisk (pythonslange): питон, arabisk (pythonslange): بايثون")
     
-    def test_load_file_with_defined_path(self):
+    def test_load_file_H(self):
+        # with defined path
         parser = Parser("data/test_data_001.csv")
         parser.load_file("data/test_data_002.csv")
         self.assertEqual(parser.input_file_path, "data/test_data_002.csv")
-    # test to 
-    ## headerless csv
+    
+    # test advanced seperation
+    def test_content_seperator(self):
+        parser = Parser()
+        test_string = "sender,msg\nMike,'Hey, let's get lunch or...'"
+        self.assertEqual(parser._content_seperator_marking(test_string, ",", ["'", '"'])[0], "sender|msg\nMike|'Hey, let's get lunch or...'")
+
+        # inactive quotation marks (ie. other mark inside quote of other marks)
+        parser = Parser()
+        test_string = "sender,msg\nMike,'Hejsa*, let's get lunch or... *Danish'"
+        self.assertEqual(parser._content_seperator_marking(test_string, ",", ["'", '"', '*'])[0], "sender|msg\nMike|'Hejsa*, let's get lunch or... *Danish'")
+
+        # string containing substrings otherwise used for marking
+        test_string = "sender,msg\nBot,This|That // and [P]-values***"
+        self.assertEqual(parser._content_seperator_marking(test_string, ",", ["'", '"'])[0], "sender[PH]msg\nBot[PH]This|That // and [P]-values***")
+
+        test_string = '["|", "//", "***", "[P]", "[PH]", "[_UNIQUE__PLACEHOLDER_]", "gxOzlNQvKr","qkz08JWUIr","GC09mxT537","hsJzOlFHFu","QGwFStDLWH","xxemaNuMRL","a2GywH2k7E","KOomQhm0LO"] '
+        with self.assertRaises(NotImplementedError):
+            parser._content_seperator_marking(test_string, ",", ["'", '"'])
+
+    def test_informed_seperator(self):
+        parser = Parser()
+        test_string = "sender,msg\nMike,'Hey, let's get lunch or...'"
+        self.assertEqual(parser._informed_seperation(test_string, ",", ["'", '"']), ["sender","msg\nMike","'Hey, let's get lunch or...'"])
 
     
+    # test text2array of dicts method
     def test_text_to_array_of_dicts_A(self):
         parser = Parser()
         # unequal length
@@ -85,8 +110,7 @@ class TestParser(unittest.TestCase):
         array = parser.text_to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
                                          ["navn", "art", "ansvarsområde", "løn", "opholdsområde"], quotation_marks= [""])
         self.assertEqual(array, [{"navn":"Ol'MacDonald", "art":"human", "ansvarsområde":"production","løn":'38000',"opholdsområde":"The Farmhouse"}])
-            
-        
+               
     # test stringify
     def test_stringify_entries(self):
         parser = Parser()
@@ -108,11 +132,10 @@ class TestParser(unittest.TestCase):
 
     # test export
     def test_export(self):
-
         # path passed to method
         parser = Parser()
         with mock.patch("builtins.open") as mockery:
-            parser.export("the very best string", "mockup.txt")
+            parser._export("the very best string", "mockup.txt")
         mockery.assert_has_calls([mock.call("mockup.txt", "w", encoding="utf-8"),
                                   mock.call().__enter__(),
                                   mock.call().__enter__().write("the very best string"),
@@ -121,21 +144,36 @@ class TestParser(unittest.TestCase):
         # path passed when initialising Parser obj
         parser = Parser("mock_source.txt", "mockup.txt")
         with mock.patch("builtins.open") as mockery:
-            parser.export("the nearly best string")
+            parser._export("the nearly best string")
         mockery.assert_has_calls([mock.call("mockup.txt", "w", encoding="utf-8"),
                                     mock.call().__enter__(),
                                     mock.call().__enter__().write("the nearly best string"),
                                     mock.call().__exit__(None, None, None)])
     
 
-    # test advanced seperation
-    def test_content_seperator(self):
-        parser = Parser()
-        test_string = "sender,msg\nMike,'Hey, let's get lunch or...'"
-        self.assertEqual(parser._content_seperator_marking(test_string, ",", ["'", '"'])[0], "sender|msg\nMike|'Hey, let's get lunch or...'")
+    
 
-    # test parse method (eller måske ikke nødv hvis load og to_json er testet)
-
+    # test parse method 
+    def test_parse_to_JSON(self):
+        parser = Parser("data/test_data_056.csv", "mockup.csv")
+        with mock.patch("builtins.open") as mockery:
+            parser.parse_to_JSON()
+        mockery.assert_has_calls([
+            mock.call('data/test_data_056.csv', 'r', encoding = 'utf-8'),
+                mock.call().__enter__(),
+                mock.call().__enter__().read(),
+                mock.call().__exit__(None, None, None),
+                mock.call().__enter__().read().splitlines(),
+                mock.call().__enter__().read().splitlines().__getitem__(0),
+                mock.call().__enter__().read().splitlines().__getitem__().__contains__('|'),
+                mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
+                mock.call().__enter__().read().splitlines(),
+                mock.call().__enter__().read().splitlines().__getitem__(slice(1, None, None)),
+                mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
+            mock.call("mockup.csv", "w", encoding="utf-8"),
+                mock.call().__enter__(),
+                mock.call().__enter__().write('[{"name": "Ol\'MacDonald", "species": "human", "department": "production", "salary": "38000", "office": "The Farmhouse"}, {"name": "Marwin", "species": "cat", "department": "security", "salary": "biscuits and pets", "office": "The Barn"}, {"name": "Betty", "species": "cow", "department": "grass", "salary": "The Barn"}, {"name": "Bob", "species": "bull", "department": "br (bovine resources)", "salary": "grass", "office": "The Barn"}]'),
+                mock.call().__exit__(None, None, None)])
     ## 
 
     # test Parser class
