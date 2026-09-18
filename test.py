@@ -1,6 +1,6 @@
 import unittest
 from unittest import mock # patch, call, mock_open
-import coverage
+#import coverage
 from prototype import Parser
 
 
@@ -54,31 +54,36 @@ class TestParser(unittest.TestCase):
     ## headerless csv
 
     
-    def test_to_array_of_dicts(self):
+    def test_text_to_array_of_dicts_A(self):
         parser = Parser()
         # unequal length
-        array = parser.to_array_of_dicts("name,species,department,salary,office\nOl'MacDonald,human,production,38000,The Farmhouse")
+        array = parser.text_to_array_of_dicts("name,species,department,salary,office\nOl'MacDonald,human,production,38000,The Farmhouse")
         self.assertEqual(array, [{"name":"Ol'MacDonald", "species":"human", "department":"production","salary":'38000',"office":"The Farmhouse"}])
 
+    def test_text_to_array_of_dicts_B(self):
+        parser = Parser()
         # unequal length across multiple entries (both too few, and too many values)
-        array = parser.to_array_of_dicts("name,species,department,salary\nOl'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn")
+        array = parser.text_to_array_of_dicts("name,species,department,salary\nOl'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn")
         self.assertEqual(array, [{"name":"Ol'MacDonald", "species":"human", "department":"production"}, 
                                  {"name":"Mervin", "species":"cat", "department":"security", "salary":"treats and pets"}]) 
 
+    def test_text_to_array_of_dicts_C(self):
+        parser = Parser()
         # loading string from self.content (i.e. no arguments passed)
         parser = Parser()
         parser.load_file("data/test_data_055.csv")
-        array = parser.to_array_of_dicts()
+        array = parser.text_to_array_of_dicts()
         self.assertEqual(array,
                          [{'name': "Ol'MacDonald", 'species': 'human', 'department': 'production', 'salary': '38000', 'office': 'The Farmhouse'},
                           {'name': 'Marwin', 'species': 'cat', 'department': 'security', 'salary': 'biscuits and pets', 'office': 'The Barn'},
                           {'name': 'Betty', 'species': 'cow', 'department': 'grass', 'salary': 'The Barn'},
                           {'name': 'Bob','species': 'bull', 'department': 'br (bovine resources)', 'salary': 'grass', 'office': 'The Barn'}])
-        
+
+    def test_text_to_array_of_dicts_D(self): 
         # using assigned_headers option
         parser = Parser()
-        array = parser.to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
-                                         ["navn", "art", "ansvarsområde", "løn", "opholdsområde"])
+        array = parser.text_to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
+                                         ["navn", "art", "ansvarsområde", "løn", "opholdsområde"], quotation_marks= [""])
         self.assertEqual(array, [{"navn":"Ol'MacDonald", "art":"human", "ansvarsområde":"production","løn":'38000',"opholdsområde":"The Farmhouse"}])
             
         
@@ -103,6 +108,8 @@ class TestParser(unittest.TestCase):
 
     # test export
     def test_export(self):
+
+        # path passed to method
         parser = Parser()
         with mock.patch("builtins.open") as mockery:
             parser.export("the very best string", "mockup.txt")
@@ -110,9 +117,22 @@ class TestParser(unittest.TestCase):
                                   mock.call().__enter__(),
                                   mock.call().__enter__().write("the very best string"),
                                   mock.call().__exit__(None, None, None)])
-        
+
+        # path passed when initialising Parser obj
+        parser = Parser("mock_source.txt", "mockup.txt")
+        with mock.patch("builtins.open") as mockery:
+            parser.export("the nearly best string")
+        mockery.assert_has_calls([mock.call("mockup.txt", "w", encoding="utf-8"),
+                                    mock.call().__enter__(),
+                                    mock.call().__enter__().write("the nearly best string"),
+                                    mock.call().__exit__(None, None, None)])
     
-    
+
+    # test advanced seperation
+    def test_content_seperator(self):
+        parser = Parser()
+        test_string = "sender,msg\nMike,'Hey, let's get lunch or...'"
+        self.assertEqual(parser._content_seperator_marking(test_string, ",", ["'", '"'])[0], "sender|msg\nMike|'Hey, let's get lunch or...'")
 
     # test parse method (eller måske ikke nødv hvis load og to_json er testet)
 
