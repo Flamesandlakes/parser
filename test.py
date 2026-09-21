@@ -172,7 +172,7 @@ class TestParser(unittest.TestCase):
             mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
             mock.call("mockup.json", "w", encoding="utf-8"),
             mock.call().__enter__(),
-            mock.call().__enter__().write('[]'),
+            mock.call().__enter__().write('[{"": "None"}]'),
             mock.call().__exit__(None, None, None)
             ])
 
@@ -194,7 +194,7 @@ class TestParser(unittest.TestCase):
             mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
             mock.call("redirected_mockup.json", "w", encoding="utf-8"),
             mock.call().__enter__(),
-            mock.call().__enter__().write('[]'),
+            mock.call().__enter__().write('[{"": "None"}]'),
             mock.call().__exit__(None, None, None)
             ])
     ## 

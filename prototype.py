@@ -46,6 +46,9 @@ class Parser():
             headers = [head.strip() for head in self._informed_seperation(content.splitlines()[0], seperator, quotation_marks)]
             rows = [line for line in content.splitlines()[1:] if line]
 
+        if not rows:
+            rows = [",".join(['None' for i in headers])]
+
         entries = [] # init list til at holde entries
         
         for _, row in enumerate(rows):
@@ -110,7 +113,6 @@ class Parser():
         marked_string += quote_string
         return marked_string, unique_placeholder
         
-
     def _informed_seperation(self, string:str, seperator:str, quotation_marks:list) -> list: 
 
         marked_string, unique_placeholder = self._content_seperator_marking(string, seperator, quotation_marks) # take the marked string and the selected placeholder
