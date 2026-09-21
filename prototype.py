@@ -1,5 +1,5 @@
 from stringHandling import StringHandler #stringify_entries, clean_string_per_csv_definition
-
+#from fileHandling import FileHandler
 
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
@@ -64,7 +64,6 @@ class Parser(StringHandler):
         for _, row in enumerate(rows):
             values = {head: value for head, value in zip(headers, self._informed_seperation(row, seperator, quotation_marks))} # find værdierne for det givne index, opstillet som dict
             entries.append(values)
-
     
         return entries
 
@@ -100,15 +99,10 @@ class Parser(StringHandler):
                     marked_string += unique_placeholder
 
                 elif chr in quotation_marks: # beginning of quotation (criteria check)
-                    if last_chr == seperator or last_chr is None: # tillad kun quote hvis forrige karakter var en seperator /eller det er den første karakter
-                        current_mark = chr
-                        quote_string += chr
-                    else: #last_chr != seperator # so dont start quotation
-                        if chr == '"':
-                            marked_string += '\"'
-                        else:
-                            marked_string += chr
-
+                    #if last_chr == seperator or last_chr is None: # tillad kun quote hvis forrige karakter var en seperator /eller det er den første karakter
+                    current_mark = chr
+                    quote_string += chr
+                    
 
                 else: # pragma: no cover
                     print("Error: The condition for this print statement should never be met. #A") # error catcher
@@ -121,6 +115,7 @@ class Parser(StringHandler):
                     if chr == current_mark: # end of quotation
                         current_mark = None
                         quote_string = quote_string.replace(unique_placeholder, seperator)
+                        #quote_string = quote_string.replace('"', '\"')
                         
                         marked_string += quote_string
                         quote_string = ""
@@ -130,7 +125,10 @@ class Parser(StringHandler):
                 else: # pragma: no cover
                     print("Error: The condition for this print statement should never be met. #B") # error catcher
             last_chr = chr
+        
         marked_string += quote_string
+        marked_string = marked_string.replace('"', '\"')
+
         return marked_string, unique_placeholder
         
     def _informed_seperation(self, string:str, seperator:str, quotation_marks:list) -> list: 
@@ -140,7 +138,7 @@ class Parser(StringHandler):
         return marked_string.split(unique_placeholder) # and split the string on the placeholder used a
 
 
-    def _export(self, content, output_file_path = None): 
+    def export_string(self, content:str, output_file_path:str = None): 
         
         if output_file_path is not None:
             self.output_file_path = output_file_path
@@ -148,23 +146,30 @@ class Parser(StringHandler):
         with open(self.output_file_path, "w", encoding = "utf-8") as file:
             file.write(content)
                 
-    def parse_to_JSON(self, output_file_path = None):
+    def parse_to_JSON(self, input_file_path = None, output_file_path = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
+
+        if input_file_path is not None:
+                    self.input_file_path = input_file_path
+
         if output_file_path is not None:
             self.output_file_path = output_file_path
 
         self.load_file()
-        entries = self.text_to_array_of_dicts(self.file_content)
+        entries = self.text_to_array_of_dicts(self.file_content, assigned_headers, seperator, quotation_marks)
         entries_str = self._stringify_entries(entries)
-        self._export(entries_str, self.output_file_path)
+        self.export_string(entries_str, self.output_file_path)
 
         
             
 if __name__ == "__main__": # pragma: no cover # sørger for at koden ikke executes når den blot importeres som modul
     parser = Parser()
-    array = parser.text_to_array_of_dicts("name,species,department,salary\nOl'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn")
-    #print(array)   
+    array = parser.text_to_array_of_dicts('na"me,species,department,salary\nOl\'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn')
+    print(array)
+    # str_array = parser._stringify_entries(array)   
+    # parser.export_string(str_array, "outputs/convention_compatibility.json")
 
-    parser = Parser("data/sogne.dawa.csv", "outputs/sogne_dk.json")
-    parser.parse_to_JSON()
+
+    #parser = Parser("data/sogne.dawa.csv", "outputs/sogne_dk.json")
+    #parser.parse_to_JSON()
 
 
