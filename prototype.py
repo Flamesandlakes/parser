@@ -1,8 +1,4 @@
-from stringHandling import StringHandler #stringify_entries, clean_string_per_csv_definition
-#from fileHandling import FileHandler
-
-test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
-
+from stringHandling import StringHandler
 class Parser(StringHandler):
     seperator_placeholders = ["|", "//", "***", "[P]", "[PH]", "[_UNIQUE__PLACEHOLDER_]",
                               "gxOzlNQvKr","qkz08JWUIr","GC09mxT537","hsJzOlFHFu","QGwFStDLWH","xxemaNuMRL","a2GywH2k7E","KOomQhm0LO"]
@@ -24,12 +20,20 @@ class Parser(StringHandler):
         self.output_file_path = output_file_path
         self.assigned_headers = assigned_headers
         self.ignore_placeholder = use_placeholder
-        #self.strict_on_quotes = strict_on_double_quotes
+
+    def update_file_input(self, input_file_path): # method to update the input file path if the input argument is valid
+        if input_file_path is not None:
+            self.input_file_path = input_file_path
+
+    def update_file_output(self, output_file_path): # method to update the output file path if the input argument is valid
+            if output_file_path is not None:
+                self.output_file_path = output_file_path
+
 
     def load_file(self, input_file_path:str=None):
         # update the input_file_path if provided as an argument
-        if input_file_path is not None:
-            self.input_file_path = input_file_path
+        
+        self.update_file_input(input_file_path)
 
         if self.input_file_path is None:
             raise ValueError("Input file path is not set. Please provide a valid input file path.")  
@@ -79,12 +83,10 @@ class Parser(StringHandler):
         else:
             raise NotImplementedError("Error: All unique placeholders appear at least once within the input string.")
 
-        #print(unique_placeholder)
         current_mark = None
         
         marked_string = ""
         quote_string = ""
-        last_chr = None
         
         for chr in string:
             if chr not in quotation_marks and chr != seperator: # eval the most common condition first
@@ -124,7 +126,6 @@ class Parser(StringHandler):
                         quote_string += chr
                 else: # pragma: no cover
                     print("Error: The condition for this print statement should never be met. #B") # error catcher
-            last_chr = chr
         
         marked_string += quote_string
         marked_string = marked_string.replace('"', '\"')
@@ -135,29 +136,25 @@ class Parser(StringHandler):
 
         marked_string, unique_placeholder = self._content_seperator_marking(string, seperator, quotation_marks) # take the marked string and the selected placeholder
 
-        return marked_string.split(unique_placeholder) # and split the string on the placeholder used a
+        return marked_string.split(unique_placeholder) # and split the string on the placeholder used at the prior step
 
 
     def export_string(self, content:str, output_file_path:str = None): 
-        
-        if output_file_path is not None:
-            self.output_file_path = output_file_path
+
+        self.update_file_output(output_file_path)
         
         with open(self.output_file_path, "w", encoding = "utf-8") as file:
             file.write(content)
                 
     def parse_to_JSON(self, input_file_path = None, output_file_path = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
 
-        if input_file_path is not None:
-                    self.input_file_path = input_file_path
-
-        if output_file_path is not None:
-            self.output_file_path = output_file_path
+        self.update_file_input(input_file_path)
+        self.update_file_output(output_file_path)
 
         self.load_file()
         entries = self.text_to_array_of_dicts(self.file_content, assigned_headers, seperator, quotation_marks)
         entries_str = self._stringify_entries(entries)
-        self.export_string(entries_str, self.output_file_path)
+        self.export_string(entries_str)#, self.output_file_path)
 
         
             

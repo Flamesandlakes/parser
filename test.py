@@ -212,7 +212,6 @@ class TestParser(unittest.TestCase):
 
 
 
-    # test Parser class
 
 if __name__ == "__main__":
     unittest.main() # pragma: no cover
