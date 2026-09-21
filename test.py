@@ -2,6 +2,7 @@ import unittest
 from unittest import mock # patch, call, mock_open
 #import coverage
 from prototype import Parser
+from stringHandling import StringHandler
 
 
 class TestParser(unittest.TestCase):
@@ -110,26 +111,7 @@ class TestParser(unittest.TestCase):
         array = parser.text_to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
                                          ["navn", "art", "ansvarsområde", "løn", "opholdsområde"], quotation_marks= [""])
         self.assertEqual(array, [{"navn":"Ol'MacDonald", "art":"human", "ansvarsområde":"production","løn":'38000',"opholdsområde":"The Farmhouse"}])
-               
-    # test stringify
-    def test_stringify_entries(self):
-        parser = Parser()
-        self.assertEqual(parser._stringify_entries([{"a": 1, "b": 2}, {"a": 3, "b": 4}]), 
-                         '[{"a": 1, "b": 2}, {"a": 3, "b": 4}]')
-
-        # special characters + apostrophe
-        self.assertEqual(parser._stringify_entries([{"slægt": "O'Malley"}]), 
-                         '[{"slægt": "O\'Malley"}]')
-
-        # nested dict
-        self.assertEqual(parser._stringify_entries({"example": {'dictionary': 'British edition'}}), 
-                         '["example": {"dictionary": "British edition"}]')
-
-        # pseudo-nested dict
-        self.assertEqual(parser._stringify_entries({"example": 'dictionary: British edition'}), 
-                         '["example": "dictionary: British edition"]')
-        # '[{"example": "dictionary: British edition"}]')
-
+        
     # test export
     def test_export(self):
         # path passed to method
@@ -151,8 +133,6 @@ class TestParser(unittest.TestCase):
                                     mock.call().__exit__(None, None, None)])
     
 
-    
-
     # test parse method 
     def test_parse_to_JSON_A(self):
         parser = Parser("data/mock.csv", "mockup.json")
@@ -165,6 +145,8 @@ class TestParser(unittest.TestCase):
             mock.call().__exit__(None, None, None),
             mock.call().__enter__().read().splitlines(),
             mock.call().__enter__().read().splitlines().__getitem__(0),
+            mock.call().__enter__().read().splitlines().__getitem__().endswith(','),
+            mock.call().__enter__().read().splitlines().__getitem__().endswith().__bool__(),
             mock.call().__enter__().read().splitlines().__getitem__().__contains__('|'),
             mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
             mock.call().__enter__().read().splitlines(),
@@ -187,6 +169,8 @@ class TestParser(unittest.TestCase):
             mock.call().__exit__(None, None, None),
             mock.call().__enter__().read().splitlines(),
             mock.call().__enter__().read().splitlines().__getitem__(0),
+            mock.call().__enter__().read().splitlines().__getitem__().endswith(','),
+            mock.call().__enter__().read().splitlines().__getitem__().endswith().__bool__(),
             mock.call().__enter__().read().splitlines().__getitem__().__contains__('|'),
             mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
             mock.call().__enter__().read().splitlines(),
@@ -198,6 +182,35 @@ class TestParser(unittest.TestCase):
             mock.call().__exit__(None, None, None)
             ])
     ## 
+    # test stringify
+    def test_stringify_entries(self):
+        handler = StringHandler()
+        self.assertEqual(handler._stringify_entries([{"a": 1, "b": 2}, {"a": 3, "b": 4}]), 
+                            '[{"a": 1, "b": 2}, {"a": 3, "b": 4}]')
+
+        # special characters + apostrophe
+        self.assertEqual(handler._stringify_entries([{"slægt": "O'Malley"}]), 
+                            '[{"slægt": "O\'Malley"}]')
+
+        # nested dict
+        self.assertEqual(handler._stringify_entries({"example": {'dictionary': 'British edition'}}), 
+                            '["example": {"dictionary": "British edition"}]')
+
+        # pseudo-nested dict
+        self.assertEqual(handler._stringify_entries({"example": 'dictionary: British edition'}), 
+                            '["example": "dictionary: British edition"]')
+
+
+    def test_string_cleaner(self):
+        handler = StringHandler()
+
+        # multiple endings commas
+        self.assertEqual(handler._clean_string_per_csv_definition("a,b,c,,,", ","), "a,b,c")
+
+        # only commas
+        self.assertEqual(handler._clean_string_per_csv_definition(",,,", ","), ",")
+
+
 
     # test Parser class
 

@@ -1,22 +1,30 @@
+from stringHandling import StringHandler #stringify_entries, clean_string_per_csv_definition
+
 
 test_file_paths = ["data/employees.ascii.csv", "data/sogne.dawa.csv"]
 
-class Parser():
+class Parser(StringHandler):
     seperator_placeholders = ["|", "//", "***", "[P]", "[PH]", "[_UNIQUE__PLACEHOLDER_]",
                               "gxOzlNQvKr","qkz08JWUIr","GC09mxT537","hsJzOlFHFu","QGwFStDLWH","xxemaNuMRL","a2GywH2k7E","KOomQhm0LO"]
+
     
-    
-    def __init__(self, input_file_path:str = None, output_file_path:str = None, assigned_headers:list = [], use_placeholder:bool=False):
+    def __init__(self, input_file_path:str = None, 
+                 output_file_path:str = None, 
+                 assigned_headers:list = [], 
+                 use_placeholder:bool=False):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
         # assigned_headers is a list of strings to use for each column. Passing anything but None or an empty list makes this program assumes there is no header.
         # use_placeholder is a boolean indicating whether to ignore the use of the placeholder output file path. 
             # If False, the user will be prompted to enter a output file path. If False, the placeholder path will just be used.
+        # # # # strict_on_double_quotes is a boolean indicating whether only double quotes (or all defined seperators) shall be escaped if inside a quote.
+        # # #     # If False, escape all seperators 
 
         self.input_file_path = input_file_path
         self.output_file_path = output_file_path
         self.assigned_headers = assigned_headers
         self.ignore_placeholder = use_placeholder
+        #self.strict_on_quotes = strict_on_double_quotes
 
     def load_file(self, input_file_path:str=None):
         # update the input_file_path if provided as an argument
@@ -29,6 +37,8 @@ class Parser():
         with open(self.input_file_path, "r", encoding = "utf-8") as file:
             content = file.read()
             self.file_content = content
+
+    
 
     def text_to_array_of_dicts(self, content:str = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
         # NOTE: by passing a list to the assigned_headers argument, it is assumed that there is no existing header in the data itself
@@ -47,7 +57,7 @@ class Parser():
             rows = [line for line in content.splitlines()[1:] if line]
 
         if not rows:
-            rows = [",".join(['None' for i in headers])]
+            rows = [",".join([str(None) for i in headers])]
 
         entries = [] # init list til at holde entries
         
@@ -59,6 +69,8 @@ class Parser():
         return entries
 
     def _content_seperator_marking(self, string:str, seperator:str, quotation_marks:list):
+
+        string = self._clean_string_per_csv_definition(string, seperator)
 
         unique_placeholder = None
         for sp in Parser.seperator_placeholders:
@@ -72,7 +84,8 @@ class Parser():
         current_mark = None
         
         marked_string = ""
-        quote_string =""
+        quote_string = ""
+        last_chr = None
         
         for chr in string:
             if chr not in quotation_marks and chr != seperator: # eval the most common condition first
@@ -86,9 +99,16 @@ class Parser():
                 if chr == seperator:
                     marked_string += unique_placeholder
 
-                elif chr in quotation_marks: # beginning of quotation
-                    current_mark = chr
-                    quote_string += chr
+                elif chr in quotation_marks: # beginning of quotation (criteria check)
+                    if last_chr == seperator or last_chr is None: # tillad kun quote hvis forrige karakter var en seperator /eller det er den første karakter
+                        current_mark = chr
+                        quote_string += chr
+                    else: #last_chr != seperator # so dont start quotation
+                        if chr == '"':
+                            marked_string += '\"'
+                        else:
+                            marked_string += chr
+
 
                 else: # pragma: no cover
                     print("Error: The condition for this print statement should never be met. #A") # error catcher
@@ -109,7 +129,7 @@ class Parser():
                         quote_string += chr
                 else: # pragma: no cover
                     print("Error: The condition for this print statement should never be met. #B") # error catcher
-
+            last_chr = chr
         marked_string += quote_string
         return marked_string, unique_placeholder
         
@@ -119,21 +139,6 @@ class Parser():
 
         return marked_string.split(unique_placeholder) # and split the string on the placeholder used a
 
-    #def _
-    
-    def _stringify_entries(self, entries: list) -> str:
-        entries = str(entries).replace("'", '"')
-        entries_str = ""
-        for pc, cc, nc in zip(entries, entries[1:], entries[2:]):
-            #print(f"pc: {pc}, cc: {cc}, nc: {nc}")
-            if cc == '"' and pc != " " and pc != "[" and pc != "{" and (nc != " " and (nc != ":" and nc !=",") and nc != "]" and nc != "}") : # hvis en karakter følger og efterfølges af ikke-mellemrum eller særlige tegn, ændrer karakteren (antag at tegnet er inden i tekst)
-                entries_str += "'"
-            
-            else:
-                entries_str += cc
-
-        entries_str = "["+entries_str+"]"
-        return entries_str
 
     def _export(self, content, output_file_path = None): 
         
@@ -157,9 +162,9 @@ class Parser():
 if __name__ == "__main__": # pragma: no cover # sørger for at koden ikke executes når den blot importeres som modul
     parser = Parser()
     array = parser.text_to_array_of_dicts("name,species,department,salary\nOl'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn")
-    print(array)   
+    #print(array)   
 
-    parser = Parser("data/test_data_056.csv", "mockup.csv")
+    parser = Parser("data/sogne.dawa.csv", "outputs/sogne_dk.json")
     parser.parse_to_JSON()
 
 
