@@ -18,10 +18,10 @@ from prototype import Parser
 parser = Parser()
 ```
 * Run the .parse_to_JSON method. 
-** You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
-** Optionally, you may assign headers (assuming there is none in the file itself) by passing a list of strings. Not used by default.
-** Optionally, you may define the character to be used to seperate on, by passing a string. Comma (",") is used by default.
-** Optionally, you may define what characters are read as quotation marks. Single and double quotes (["'", '""]) by default.
+    ** You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
+    ** Optionally, you may assign headers (assuming there is none in the file itself) by passing a list of strings. Not used by default.
+    ** Optionally, you may define the character to be used to seperate on, by passing a string. Comma (",") is used by default.
+    ** Optionally, you may define what characters are read as quotation marks. Single and double quotes (["'", '""]) by default.
 ```
 parser.parse_to_JSON(<input file location>, <output file destination>)
 ```
