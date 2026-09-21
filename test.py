@@ -113,11 +113,11 @@ class TestParser(unittest.TestCase):
         self.assertEqual(array, [{"navn":"Ol'MacDonald", "art":"human", "ansvarsområde":"production","løn":'38000',"opholdsområde":"The Farmhouse"}])
         
     # test export
-    def test_export(self):
+    def test_export_string(self):
         # path passed to method
         parser = Parser()
         with mock.patch("builtins.open") as mockery:
-            parser._export("the very best string", "mockup.txt")
+            parser.export_string("the very best string", "mockup.txt")
         mockery.assert_has_calls([mock.call("mockup.txt", "w", encoding="utf-8"),
                                   mock.call().__enter__(),
                                   mock.call().__enter__().write("the very best string"),
@@ -126,7 +126,7 @@ class TestParser(unittest.TestCase):
         # path passed when initialising Parser obj
         parser = Parser("mock_source.txt", "mockup.txt")
         with mock.patch("builtins.open") as mockery:
-            parser._export("the nearly best string")
+            parser.export_string("the nearly best string")
         mockery.assert_has_calls([mock.call("mockup.txt", "w", encoding="utf-8"),
                                     mock.call().__enter__(),
                                     mock.call().__enter__().write("the nearly best string"),
@@ -161,7 +161,7 @@ class TestParser(unittest.TestCase):
     def test_parse_to_JSON_B(self):
         parser = Parser("data/mock.csv", "mockup.json")
         with mock.patch("builtins.open") as mockery:
-            parser.parse_to_JSON("redirected_mockup.json")
+            parser.parse_to_JSON(None, "redirected_mockup.json")
         mockery.assert_has_calls([
             mock.call('data/mock.csv', 'r', encoding = 'utf-8'),
             mock.call().__enter__(),
