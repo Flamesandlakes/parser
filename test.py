@@ -154,26 +154,49 @@ class TestParser(unittest.TestCase):
     
 
     # test parse method 
-    def test_parse_to_JSON(self):
-        parser = Parser("data/test_data_056.csv", "mockup.csv")
+    def test_parse_to_JSON_A(self):
+        parser = Parser("data/mock.csv", "mockup.json")
         with mock.patch("builtins.open") as mockery:
             parser.parse_to_JSON()
         mockery.assert_has_calls([
-            mock.call('data/test_data_056.csv', 'r', encoding = 'utf-8'),
-                mock.call().__enter__(),
-                mock.call().__enter__().read(),
-                mock.call().__exit__(None, None, None),
-                mock.call().__enter__().read().splitlines(),
-                mock.call().__enter__().read().splitlines().__getitem__(0),
-                mock.call().__enter__().read().splitlines().__getitem__().__contains__('|'),
-                mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
-                mock.call().__enter__().read().splitlines(),
-                mock.call().__enter__().read().splitlines().__getitem__(slice(1, None, None)),
-                mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
-            mock.call("mockup.csv", "w", encoding="utf-8"),
-                mock.call().__enter__(),
-                mock.call().__enter__().write('[{"name": "Ol\'MacDonald", "species": "human", "department": "production", "salary": "38000", "office": "The Farmhouse"}, {"name": "Marwin", "species": "cat", "department": "security", "salary": "biscuits and pets", "office": "The Barn"}, {"name": "Betty", "species": "cow", "department": "grass", "salary": "The Barn"}, {"name": "Bob", "species": "bull", "department": "br (bovine resources)", "salary": "grass", "office": "The Barn"}]'),
-                mock.call().__exit__(None, None, None)])
+            mock.call('data/mock.csv', 'r', encoding = 'utf-8'),
+            mock.call().__enter__(),
+            mock.call().__enter__().read(),
+            mock.call().__exit__(None, None, None),
+            mock.call().__enter__().read().splitlines(),
+            mock.call().__enter__().read().splitlines().__getitem__(0),
+            mock.call().__enter__().read().splitlines().__getitem__().__contains__('|'),
+            mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
+            mock.call().__enter__().read().splitlines(),
+            mock.call().__enter__().read().splitlines().__getitem__(slice(1, None, None)),
+            mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
+            mock.call("mockup.json", "w", encoding="utf-8"),
+            mock.call().__enter__(),
+            mock.call().__enter__().write('[]'),
+            mock.call().__exit__(None, None, None)
+            ])
+
+    def test_parse_to_JSON_B(self):
+        parser = Parser("data/mock.csv", "mockup.json")
+        with mock.patch("builtins.open") as mockery:
+            parser.parse_to_JSON("redirected_mockup.json")
+        mockery.assert_has_calls([
+            mock.call('data/mock.csv', 'r', encoding = 'utf-8'),
+            mock.call().__enter__(),
+            mock.call().__enter__().read(),
+            mock.call().__exit__(None, None, None),
+            mock.call().__enter__().read().splitlines(),
+            mock.call().__enter__().read().splitlines().__getitem__(0),
+            mock.call().__enter__().read().splitlines().__getitem__().__contains__('|'),
+            mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
+            mock.call().__enter__().read().splitlines(),
+            mock.call().__enter__().read().splitlines().__getitem__(slice(1, None, None)),
+            mock.call().__enter__().read().splitlines().__getitem__().__iter__(),
+            mock.call("redirected_mockup.json", "w", encoding="utf-8"),
+            mock.call().__enter__(),
+            mock.call().__enter__().write('[]'),
+            mock.call().__exit__(None, None, None)
+            ])
     ## 
 
     # test Parser class
