@@ -120,8 +120,7 @@ class Parser(FileHandler, StringHandler):
                 
     def parse_to_JSON(self, input_file_path = None, output_file_path = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
 
-        self.update_file_input(input_file_path)
-        self.update_file_output(output_file_path)
+        self.set_file_paths(input_file_path, output_file_path)
 
         self.load_file()
         entries = self.text_to_array_of_dicts(self.file_content, assigned_headers, seperator, quotation_marks)
