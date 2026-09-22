@@ -1,5 +1,6 @@
+from fileHandling import FileHandler
 from stringHandling import StringHandler
-class Parser(StringHandler):
+class Parser(FileHandler, StringHandler):
     seperator_placeholders = ["|", "//", "***", "[P]", "[PH]", "[_UNIQUE__PLACEHOLDER_]",
                               "gxOzlNQvKr","qkz08JWUIr","GC09mxT537","hsJzOlFHFu","QGwFStDLWH","xxemaNuMRL","a2GywH2k7E","KOomQhm0LO"]
 
@@ -20,29 +21,7 @@ class Parser(StringHandler):
         self.output_file_path = output_file_path
         self.assigned_headers = assigned_headers
         self.ignore_placeholder = use_placeholder
-
-    def update_file_input(self, input_file_path): # method to update the input file path if the input argument is valid
-        if input_file_path is not None:
-            self.input_file_path = input_file_path
-
-    def update_file_output(self, output_file_path): # method to update the output file path if the input argument is valid
-            if output_file_path is not None:
-                self.output_file_path = output_file_path
-
-
-    def load_file(self, input_file_path:str=None):
-        # update the input_file_path if provided as an argument
-        
-        self.update_file_input(input_file_path)
-
-        if self.input_file_path is None:
-            raise ValueError("Input file path is not set. Please provide a valid input file path.")  
-
-        with open(self.input_file_path, "r", encoding = "utf-8") as file:
-            content = file.read()
-            self.file_content = content
-
-    
+  
 
     def text_to_array_of_dicts(self, content:str = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
         # NOTE: by passing a list to the assigned_headers argument, it is assumed that there is no existing header in the data itself
