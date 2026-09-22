@@ -27,3 +27,10 @@ class FileHandler():
         with open(self.input_file_path, "r", encoding = "utf-8") as file:
             content = file.read()
             self.file_content = content
+            
+    def export_string(self, content:str, output_file_path:str = None): 
+    
+            self.update_file_output(output_file_path)
+            
+            with open(self.output_file_path, "w", encoding = "utf-8") as file:
+                file.write(content)

@@ -117,13 +117,6 @@ class Parser(FileHandler, StringHandler):
 
         return marked_string.split(unique_placeholder) # and split the string on the placeholder used at the prior step
 
-
-    def export_string(self, content:str, output_file_path:str = None): 
-
-        self.update_file_output(output_file_path)
-        
-        with open(self.output_file_path, "w", encoding = "utf-8") as file:
-            file.write(content)
                 
     def parse_to_JSON(self, input_file_path = None, output_file_path = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
 
