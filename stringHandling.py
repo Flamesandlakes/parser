@@ -14,7 +14,7 @@ class StringHandler():
             entries_str = "["+entries_str+"]"
             return entries_str
 
-    def _clean_string_per_csv_definition(self, string: str, seperator):
+    def _clean_string_as_csv(self, string: str, seperator):
             # must not end with a seperator
             while string.endswith(seperator) and isinstance(string, str) and len(string) > 1:
                 string = string[0:-1]

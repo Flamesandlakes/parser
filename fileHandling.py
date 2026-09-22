@@ -8,6 +8,7 @@ class FileHandler():
         self.output_file_path = output_file_path
         
     def set_file_paths(self, input_file_path, output_file_path): # method to update the input file path if the input argument is valid
+            # NOTE: Pass None to either argument to not update it.
             if input_file_path is not None:
                 self.input_file_path = input_file_path
             

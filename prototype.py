@@ -52,7 +52,7 @@ class Parser(FileHandler, StringHandler):
 
     def _content_seperator_marking(self, string:str, seperator:str, quotation_marks:list):
 
-        string = self._clean_string_per_csv_definition(string, seperator)
+        string = self._clean_string_as_csv(string, seperator)
 
         unique_placeholder = None
         for sp in Parser.seperator_placeholders:

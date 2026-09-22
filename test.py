@@ -205,10 +205,10 @@ class TestParser(unittest.TestCase):
         handler = StringHandler()
 
         # multiple endings commas
-        self.assertEqual(handler._clean_string_per_csv_definition("a,b,c,,,", ","), "a,b,c")
+        self.assertEqual(handler._clean_string_as_csv("a,b,c,,,", ","), "a,b,c")
 
         # only commas
-        self.assertEqual(handler._clean_string_per_csv_definition(",,,", ","), ",")
+        self.assertEqual(handler._clean_string_as_csv(",,,", ","), ",")
 
 
 
