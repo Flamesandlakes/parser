@@ -7,33 +7,29 @@ class Parser(FileHandler, StringHandler):
     
     def __init__(self, input_file_path:str = None, 
                  output_file_path:str = None, 
-                 assigned_headers:list = [], 
-                 use_placeholder:bool=False):
+                 added_headers:list = [] 
+                 ):
         # input_file_path is the path to the input file (including file name and type)
         # output_file_path is the path where the resulting file will be saved (without file name)
-        # assigned_headers is a list of strings to use for each column. Passing anything but None or an empty list makes this program assumes there is no header.
-        # use_placeholder is a boolean indicating whether to ignore the use of the placeholder output file path. 
-            # If False, the user will be prompted to enter a output file path. If False, the placeholder path will just be used.
-        # # # # strict_on_double_quotes is a boolean indicating whether only double quotes (or all defined seperators) shall be escaped if inside a quote.
-        # # #     # If False, escape all seperators 
+        # added_headers is a list of strings to use for each column. Passing anything but None or an empty list makes this program assumes there is no header.
+    
 
         self.input_file_path = input_file_path
         self.output_file_path = output_file_path
-        self.assigned_headers = assigned_headers
-        self.ignore_placeholder = use_placeholder
+        self.added_headers = added_headers
   
 
-    def text_to_array_of_dicts(self, content:str = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
-        # NOTE: by passing a list to the assigned_headers argument, it is assumed that there is no existing header in the data itself
+    def text_to_array_of_dicts(self, content:str = None, added_headers = [], seperator = ",", quotation_marks = ["'", '"']):
+        # NOTE: by passing a list to the added_headers argument, it is assumed that there is no existing header in the data itself
         
         if content is None:
             content = self.file_content
         
-        if assigned_headers:
-            self.assigned_headers = assigned_headers    
+        if added_headers:
+            self.added_headers = added_headers    
 
-        if self.assigned_headers: # if assigned_headers, assign them
-            headers = self.assigned_headers
+        if self.added_headers: # if added_headers, assign them
+            headers = self.added_headers
             rows = [line for line in content.splitlines() if line] # and assume that all lines in the original text are entries/values (ie. non-headers)
         else: # otherwise assign the first row as the headers
             headers = [head.strip() for head in self._informed_seperation(content.splitlines()[0], seperator, quotation_marks)]
@@ -118,12 +114,12 @@ class Parser(FileHandler, StringHandler):
         return marked_string.split(unique_placeholder) # and split the string on the placeholder used at the prior step
 
                 
-    def parse_to_JSON(self, input_file_path = None, output_file_path = None, assigned_headers = [], seperator = ",", quotation_marks = ["'", '"']):
+    def parse_to_JSON(self, input_file_path = None, output_file_path = None, added_headers = [], seperator = ",", quotation_marks = ["'", '"']):
 
         self.set_file_paths(input_file_path, output_file_path)
 
         self.load_file()
-        entries = self.text_to_array_of_dicts(self.file_content, assigned_headers, seperator, quotation_marks)
+        entries = self.text_to_array_of_dicts(self.file_content, added_headers, seperator, quotation_marks)
         entries_str = self._stringify_entries(entries)
         self.export_string(entries_str)#, self.output_file_path)
 
