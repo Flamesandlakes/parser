@@ -30,7 +30,7 @@ The parser object provides two primary methods for working with CSV formated tex
 <p>
 Parser<i>.text_to_array_of_dicts</i>: Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
 </p>
-- Run the .text_to_array_of_dicts method.<br>
+* Run the .text_to_array_of_dicts method.<br>
     - You must pass a string as the first argument.<br>
     - Optionally, you may add headers (under the assumption there is no existing line with headers in the file) by passing a list of strings. Not used by default.<br>
     - Optionally, you may define the character to be used to seperate on, by passing a string. Comma (",") is used by default.<br>
@@ -43,7 +43,7 @@ array = parserObj.text_to_array_of_dicts(<string in CSV format>)
 <p>
 Parser<i>.parse_to_JSON</i>: If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
 </p>
-- Run the .parse_to_JSON method. 
+* Run the .parse_to_JSON method. 
     - You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
     - In addition you have the same three optional arguments as for the .text_to_array_of_dicts method.
     
