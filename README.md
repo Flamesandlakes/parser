@@ -9,10 +9,10 @@ The Parser assumes that the input (be it a file or a text string) is in a CSV fo
  
 ## Getting Started
 If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
-- Import Parser class from prototype.py. Your "prototype.py"-file must also be stored in the same directory as your "stringHandling.py"-file. 
+- Import Parser class from main.py.  
 
 ```
-from prototype import Parser
+from main import Parser
 ```
 
 - Initialize a Parser class oject
@@ -34,9 +34,13 @@ parser.parse_to_JSON(<input file location>, <output file destination>)
 ### Dependencies
 
 * Python 3.13.15
+* Packages: 
+    - unittest
+    - (optionally: coverage)
 
 ### Installing
 
+* Your "main.py"-file must also be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files.
 * How/where to download your program
 * Any modifications needed to be made to files/folders
 

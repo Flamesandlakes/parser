@@ -2,6 +2,5 @@
 *.pyc
 /.venv
 /__pycache__
-/src
 .python-version
 uv.lock
