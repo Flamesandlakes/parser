@@ -1,14 +1,14 @@
 # CSV String Parser
 
-Python script for converting texts and files (adherring to a CSV dataformat) to an JSON array of objects (in Python: a list of dictionaries)  
+Python script for converting texts and files (adherring to a CSV dataformat) to an JSON array of objects [^1]  
 
 ## Description
 
 All of the necessary functionality is tied to the Parser class as methods.
-The Parser assumes that the input (be it a file or a text string) is in a CSV format (however other seperators besides commas can be used).
+The Parser assumes that the input (be it a file or a text string) is in a CSV format [^2].
  
 ## Getting Started
-* You must first import the Parser class and instantiate a Parser class object
+You must first import the Parser class and instantiate a Parser class object
 - Import Parser class.  
 
 ```
@@ -22,11 +22,11 @@ parserObj = Parser()
 ```
 
 The parser object provides two primary methods for working with CSV formated text.<br>
-    - .text_to_array_of_dicts()
-    - .parse_to_JSON()
+    - <i>.text_to_array_of_dicts()</i><br>
+    - <i>.parse_to_JSON()</i><br>
 
-* Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
-1. Run the .text_to_array_of_dicts method.
+<i>Parser.text_to_array_of_dicts</i>: Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
+- Run the .text_to_array_of_dicts method.
     - You must pass a string as the first argument.
     - Optionally, you may add headers (under the assumption there is no existing line with headers in the file) by passing a list of strings. Not used by default.
     - Optionally, you may define the character to be used to seperate on, by passing a string. Comma (",") is used by default.
@@ -36,22 +36,13 @@ The parser object provides two primary methods for working with CSV formated tex
 array = parserObj.text_to_array_of_dicts(<string in CSV format>)
 ```
 
-* If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
-1. Run the .parse_to_JSON method. 
+<i>Parser.parse_to_JSON</i>: If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
+- Run the .parse_to_JSON method. 
     - You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
     - In addition you have the same three optional arguments as for the .text_to_array_of_dicts method.
     
 ```
 parserObj.parse_to_JSON(<input file location>, <output file destination>)
-```
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-parserObj = Parser() # Initialize an instance of the Parser class
-
-parserObj.load(<path to CSV formated file>) # 
 ```
 
 
@@ -63,22 +54,16 @@ parserObj.load(<path to CSV formated file>) #
 
 ### Installing
 
-* Download or clone this repository[^1].
+* Download or clone this repository [^3].
 * Place the csvparser subdirectory in your work environment of choice. 
-* Your "main.py"-file must be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files, like they are in this directory by default[^2].
+* Your "main.py"-file must be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files, like they are in this directory by default [^4].
 * 
 
-[^1]: It might be possible to install as a package in the future. However if so, expect this section to be updated accordingly.
-[^2]: You may choose to disregard the tests subdirectory. However it may confirm whether everything runs as intended.
+[^1]: A list of dictionaries in Python.
+[^2]: However other seperators besides commas can be used, as long as they are passed to the 'seperator' argument. The case of multiple different seperators within the same file and/or text is NOT supported. 
+[^3]: It might be possible to install as a package in the future. However if so, expect this section to be updated accordingly.
+[^4]: You may choose to disregard the tests subdirectory. However it may confirm whether everything runs as intended.
 
-
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
 
 ## Version History
 For now, refer to the commit history.
