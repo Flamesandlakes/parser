@@ -1,20 +1,32 @@
+
+#import sys
+#sys.path.insert(0, "../src")
+
 import unittest
 from unittest import mock # patch, call, mock_open
 #import coverage
-from main import Parser
-from stringHandling import StringHandler
+from parser.main import Parser
+from parser.stringHandling import StringHandler
+#from parser.fileHandling import FileHandler
+import os
+import pathlib
+
 
 
 class TestParser(unittest.TestCase):
+
+    #path = os.getcwd() #pathlib.Path().resolve()
+    path = os.path.join(os.path.abspath(os.getcwd()), "tests\\")
+
     def test_load_file_A(self):
         # simple case
-        parser = Parser("data/test_data_001.csv")
+        parser = Parser(os.path.join(TestParser.path,"data","test_data_001.csv"))
         parser.load_file()
         self.assertEqual(parser.file_content, "x,y,z")
 
     def test_load_file_B(self):
         # unique characters
-        parser = Parser("data/test_data_002.csv")
+        parser = Parser(os.path.join(TestParser.path,"data", "test_data_002.csv"))
         parser.load_file()
         self.assertEqual(parser.file_content, "region,område,præst,mødested")
 
@@ -32,27 +44,27 @@ class TestParser(unittest.TestCase):
 
     def test_load_file_E(self):
         # text file
-        parser = Parser("data/test_data_003.txt")
+        parser = Parser(os.path.join(TestParser.path,"data/test_data_003.txt"))
         parser.load_file()
         self.assertEqual(parser.file_content, "lopus segnum le terra roma via ve e")
 
     def test_load_file_F(self):
         # empty file
-        parser = Parser("data/test_data_004.csv")
+        parser = Parser(os.path.join(TestParser.path,"data/test_data_004.csv"))
         parser.load_file()
         self.assertEqual(parser.file_content, "")
 
     def test_load_file_G(self):
         # foreign characters
-        parser = Parser("data/test_data_005.csv")
+        parser = Parser(os.path.join(TestParser.path,"data/test_data_005.csv"))
         parser.load_file()
         self.assertEqual(parser.file_content, "simpel kinesisk: 汉字, traditionel kinesisk: 漢字, japansk kanji: 漢字, koreansk hanja: 漢字, koreansk hangul: 한자, bulgarisk (pythonslange): питон, arabisk (pythonslange): بايثون")
     
     def test_load_file_H(self):
         # with defined path
-        parser = Parser("data/test_data_001.csv")
-        parser.load_file("data/test_data_002.csv")
-        self.assertEqual(parser.input_file_path, "data/test_data_002.csv")
+        parser = Parser(os.path.join(TestParser.path,"data\\test_data_001.csv"))
+        parser.load_file(os.path.join(TestParser.path,"data\\test_data_002.csv"))
+        self.assertEqual(parser.input_file_path, os.path.join(TestParser.path,"data\\test_data_002.csv"))
     
     # test advanced seperation
     def test_content_seperator(self):
@@ -97,7 +109,7 @@ class TestParser(unittest.TestCase):
         parser = Parser()
         # loading string from self.content (i.e. no arguments passed)
         parser = Parser()
-        parser.load_file("data/test_data_055.csv")
+        parser.load_file(os.path.join(TestParser.path,"data/test_data_055.csv"))
         array = parser.text_to_array_of_dicts()
         self.assertEqual(array,
                          [{'name': "Ol'MacDonald", 'species': 'human', 'department': 'production', 'salary': '38000', 'office': 'The Farmhouse'},
@@ -219,3 +231,5 @@ if __name__ == "__main__":
     # array = parser.to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
     #                                     ["navn", "art", "ansvarsområde", "løn", "opholdsområde"])
     # print(array)
+    #print(TestParser().path1)
+    #print(TestParser().path2)

@@ -1,0 +1,4 @@
+1. Install coverage package (with pip install, potentially inside an env, you use)
+2. Run 'coverage run -m unittest', or 'coverage run -m unittest ".\tests" if test.py is stored in the tests folder.
+3. For a quick overview of coverage, run "coverage report"
+4. For detailed insights, run "coverage html". It will generate an html file, you can interact with.

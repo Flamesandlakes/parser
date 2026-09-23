@@ -1,5 +1,5 @@
-from fileHandling import FileHandler
-from stringHandling import StringHandler
+from parser.fileHandling import FileHandler
+from parser.stringHandling import StringHandler
 class Parser(FileHandler, StringHandler):
     seperator_placeholders = ["|", "//", "***", "[P]", "[PH]", "[_UNIQUE__PLACEHOLDER_]",
                               "gxOzlNQvKr","qkz08JWUIr","GC09mxT537","hsJzOlFHFu","QGwFStDLWH","xxemaNuMRL","a2GywH2k7E","KOomQhm0LO"]

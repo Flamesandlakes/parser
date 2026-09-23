@@ -1,4 +1,0 @@
-1. Install coverage package (with pip install, potenitally inside an env, you use)
-2. Run "coverage run -m unittest"
-3. For a quick overview of coverage, run "coverage report"
-4. For detailed insights, run "coverage html". It will generate an html file, you can interact with.

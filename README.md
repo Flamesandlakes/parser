@@ -14,6 +14,10 @@ If you want to directly convert a file to its corresponding JSON array (in the f
 ```
 from main import Parser
 ```
+Or, if the directory
+```
+from main import Parser
+```
 
 - Initialize a Parser class oject
 
@@ -35,14 +39,13 @@ parser.parse_to_JSON(<input file location>, <output file destination>)
 
 * Python 3.13.15
 * Packages: 
-    - unittest
-    - (optionally: coverage)
+    - coverage>=7.16.1
 
 ### Installing
 
-* Your "main.py"-file must also be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files.
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+* Download or clone this repository.
+* Your "main.py"-file must be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files.
+
 
 ### Executing program
 
