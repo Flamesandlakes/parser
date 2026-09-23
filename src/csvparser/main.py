@@ -20,7 +20,10 @@ class Parser(FileHandler, StringHandler):
   
 
     def text_to_array_of_dicts(self, content:str = None, added_headers = [], seperator = ",", quotation_marks = ["'", '"']):
+        # content is the string that will be parsed and converted to an array of dictionaries.
+        # added_headers is a list of strings that will be used as the keys in the dictionaries within the array.
         # NOTE: by passing a list to the added_headers argument, it is assumed that there is no existing header in the data itself
+        # 
         
         if content is None:
             content = self.file_content
@@ -36,7 +39,7 @@ class Parser(FileHandler, StringHandler):
             rows = [line for line in content.splitlines()[1:] if line]
 
         if not rows:
-            rows = [",".join([str(None) for i in headers])]
+            rows = [",".join([str(None) for _ in headers])]
 
         entries = [] # init list til at holde entries
         
@@ -47,17 +50,21 @@ class Parser(FileHandler, StringHandler):
         return entries
 
     def _content_seperator_marking(self, string:str, seperator:str, quotation_marks:list):
+        # takes a string, embeds it with points of seperation, and return this marked string alongside the marker used to indicate points of seperation
 
         string = self._clean_string_as_csv(string, seperator)
 
         unique_placeholder = None
-        for sp in Parser.seperator_placeholders:
+        for sp in Parser.seperator_placeholders: # check the local "library" of seperation markers, and choose the first to not occur in the original string itself
             if sp not in string:
                 unique_placeholder = sp
                 break
-        else:
+        else: # if all of them occur at least once, raise an error
             raise NotImplementedError("Error: All unique placeholders appear at least once within the input string.")
 
+
+        # loop through the string
+        # and keep track of quotation (and how that may affect the seperator)  
         current_mark = None
         
         marked_string = ""
@@ -102,12 +109,13 @@ class Parser(FileHandler, StringHandler):
                 else: # pragma: no cover
                     print("Error: The condition for this print statement should never be met. #B") # error catcher
         
-        marked_string += quote_string
+        marked_string += quote_string # if the quote was never closed, assume it wasnt a quote
         marked_string = marked_string.replace('"', '\"')
 
         return marked_string, unique_placeholder
         
     def _informed_seperation(self, string:str, seperator:str, quotation_marks:list) -> list: 
+        # read a (marked) file alongside the seperation marker, then split the string on the marker, and return the resulting list
 
         marked_string, unique_placeholder = self._content_seperator_marking(string, seperator, quotation_marks) # take the marked string and the selected placeholder
 
@@ -115,13 +123,14 @@ class Parser(FileHandler, StringHandler):
 
                 
     def parse_to_JSON(self, input_file_path = None, output_file_path = None, added_headers = [], seperator = ",", quotation_marks = ["'", '"']):
+        # take a file path, load the corresponding file, convert it to an array of dicts, export the array as a JSON file. 
 
         self.set_file_paths(input_file_path, output_file_path)
 
         self.load_file()
         entries = self.text_to_array_of_dicts(self.file_content, added_headers, seperator, quotation_marks)
         entries_str = self._stringify_entries(entries)
-        self.export_string(entries_str)#, self.output_file_path)
+        self.export_string(entries_str)#NOTE: this method relies on the output path already saved in the object
 
         
             

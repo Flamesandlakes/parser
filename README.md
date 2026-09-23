@@ -1,11 +1,11 @@
 # CSV String Parser
 
-Python script for converting texts and files (adherring to a CSV format) to an JSON array of objects [^1]  
+Python script for converting texts and files (adherring to a CSV-format) to an JSON array of objects [^1]  
 
 ## Description
 
 All of the necessary functionality is tied to the Parser class as methods.
-The Parser assumes that the input (be it a file or a text string) is in a CSV format [^2].
+The Parser assumes that the input (be it a file or a text string) is in a CSV-format [^2].
  
 ## Getting Started
 
@@ -23,12 +23,12 @@ parserObj = Parser()
 ```
 
 <p>
-The parser object provides two primary methods for working with CSV formated text.<br>
+The parser object provides two primary methods for working with CSV-formatted text.<br>
     - <i>.text_to_array_of_dicts()</i><br>
     - <i>.parse_to_JSON()</i><br>
 </p>
 
-Parser<i>.text_to_array_of_dicts</i>: Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
+Parser<i>.text_to_array_of_dicts</i>: Parse a CSV-formatted string and convert it to an array of dictionaries (without exporting it).
 * Run the .text_to_array_of_dicts method.
     - You must pass a string as the first argument.<br>
     - Optionally, you may add headers (under the assumption there is no existing line with headers in the file) by passing a list of strings. Not used by default.<br>
@@ -36,7 +36,7 @@ Parser<i>.text_to_array_of_dicts</i>: Parse CSV-like string and convert it to an
     - Optionally, you may define what characters are read as quotation marks. Single and double quotes (["'", '""]) are used by default.<br>
 
 ```
-array = parserObj.text_to_array_of_dicts(<string in CSV format>)
+array = parserObj.text_to_array_of_dicts(<string in CSV-format>)
 ```
 
 
