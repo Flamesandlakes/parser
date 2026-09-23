@@ -88,7 +88,7 @@ class Parser(FileHandler, StringHandler):
                     quote_string += chr
                     
 
-                else: # pragma: no cover
+                else: # pragma: cover
                     print("Error: The condition for this print statement should never be met. #A") # error catcher
 
             else: # (chr in quotation_marks or chr == seperator) and current_mark != None, ie. inside quote
@@ -106,7 +106,7 @@ class Parser(FileHandler, StringHandler):
                         marked_string += chr
                     else: # quotation mark but not for current quote
                         quote_string += chr
-                else: # pragma: no cover
+                else: # pragma: cover
                     print("Error: The condition for this print statement should never be met. #B") # error catcher
         
         marked_string += quote_string # if the quote was never closed, assume it wasnt a quote
@@ -134,7 +134,7 @@ class Parser(FileHandler, StringHandler):
 
         
             
-if __name__ == "__main__": # pragma: no cover # sørger for at koden ikke executes når den blot importeres som modul
+if __name__ == "__main__": # pragma: cover # sørger for at koden ikke executes når den blot importeres som modul
     parser = Parser()
     array = parser.text_to_array_of_dicts('name,species,department,salary\nOl\'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn')
     print(array)

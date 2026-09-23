@@ -218,7 +218,7 @@ class TestParser(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main() # pragma: no cover
+    unittest.main() # pragma: cover
     # parser = Parser()
     # array = parser.to_array_of_dicts("Ol'MacDonald,human,production,38000,The Farmhouse", 
     #                                     ["navn", "art", "ansvarsområde", "løn", "opholdsområde"])
