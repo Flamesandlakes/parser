@@ -23,7 +23,7 @@ class Parser(FileHandler, StringHandler):
         # content is the string that will be parsed and converted to an array of dictionaries.
         # added_headers is a list of strings that will be used as the keys in the dictionaries within the array.
         # NOTE: by passing a list to the added_headers argument, it is assumed that there is no existing header in the data itself
-        # 
+        # seperator 
         
         if content is None:
             content = self.file_content
