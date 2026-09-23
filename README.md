@@ -42,6 +42,7 @@ array = parserObj.text_to_array_of_dicts(<string in CSV format>)
 
 <p>
 Parser<i>.parse_to_JSON</i>: If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
+</p>
 - Run the .parse_to_JSON method. 
     - You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
     - In addition you have the same three optional arguments as for the .text_to_array_of_dicts method.
@@ -49,7 +50,7 @@ Parser<i>.parse_to_JSON</i>: If you want to directly convert a file to its corre
 ```
 parserObj.parse_to_JSON(<input file location>, <output file destination>)
 ```
-</p>
+
 
 ### Dependencies
 
