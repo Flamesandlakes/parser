@@ -127,13 +127,5 @@ class Parser(FileHandler, StringHandler):
             
 if __name__ == "__main__": # pragma: no cover # sørger for at koden ikke executes når den blot importeres som modul
     parser = Parser()
-    array = parser.text_to_array_of_dicts('na"me,species,department,salary\nOl\'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn')
+    array = parser.text_to_array_of_dicts('name,species,department,salary\nOl\'MacDonald,human,production\nMervin,cat,security,treats and pets,the Barn')
     print(array)
-    # str_array = parser._stringify_entries(array)   
-    # parser.export_string(str_array, "outputs/convention_compatibility.json")
-
-
-    #parser = Parser("data/sogne.dawa.csv", "outputs/sogne_dk.json")
-    #parser.parse_to_JSON()
-
-

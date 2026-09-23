@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock # patch, call, mock_open
 #import coverage
-from prototype import Parser
+from main import Parser
 from stringHandling import StringHandler
 
 
