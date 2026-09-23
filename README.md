@@ -1,6 +1,6 @@
 # CSV String Parser
 
-Python script for converting texts and files (adherring to a CSV dataformat) to an JSON array of objects [^1]  
+Python script for converting texts and files (adherring to a CSV format) to an JSON array of objects [^1]  
 
 ## Description
 
@@ -8,6 +8,7 @@ All of the necessary functionality is tied to the Parser class as methods.
 The Parser assumes that the input (be it a file or a text string) is in a CSV format [^2].
  
 ## Getting Started
+<p>
 You must first import the Parser class and instantiate a Parser class object
 - Import Parser class.  
 
@@ -20,12 +21,14 @@ from csvparser.main import Parser
 ```
 parserObj = Parser()
 ```
-
+</p>
+<p>
 The parser object provides two primary methods for working with CSV formated text.<br>
     - <i>.text_to_array_of_dicts()</i><br>
     - <i>.parse_to_JSON()</i><br>
-
-<i>Parser.text_to_array_of_dicts</i>: Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
+</p>
+<p>
+Parser<i>.text_to_array_of_dicts</i>: Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
 - Run the .text_to_array_of_dicts method.
     - You must pass a string as the first argument.
     - Optionally, you may add headers (under the assumption there is no existing line with headers in the file) by passing a list of strings. Not used by default.
@@ -35,8 +38,9 @@ The parser object provides two primary methods for working with CSV formated tex
 ```
 array = parserObj.text_to_array_of_dicts(<string in CSV format>)
 ```
-
-<i>Parser.parse_to_JSON</i>: If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
+</p>
+<p>
+Parser<i>.parse_to_JSON</i>: If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
 - Run the .parse_to_JSON method. 
     - You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
     - In addition you have the same three optional arguments as for the .text_to_array_of_dicts method.
@@ -44,7 +48,7 @@ array = parserObj.text_to_array_of_dicts(<string in CSV format>)
 ```
 parserObj.parse_to_JSON(<input file location>, <output file destination>)
 ```
-
+</p>
 
 ### Dependencies
 
