@@ -8,32 +8,52 @@ All of the necessary functionality is tied to the Parser class as methods.
 The Parser assumes that the input (be it a file or a text string) is in a CSV format (however other seperators besides commas can be used).
  
 ## Getting Started
-If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
-- Import Parser class from main.py.  
+* You must first import the Parser class and instantiate a Parser class object
+- Import Parser class.  
 
 ```
-from main import Parser
-```
-Or, if the directory
-```
-from main import Parser
+from csvparser.main import Parser
 ```
 
 - Initialize a Parser class oject
 
 ```
-parser = Parser()
+parserObj = Parser()
 ```
 
-- Run the .parse_to_JSON method. 
-    - You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
-    - Optionally, you may assign headers (assuming there is none in the file itself) by passing a list of strings. Not used by default.
+The parser object provides two primary methods for working with CSV formated text.<br>
+    - .text_to_array_of_dicts()
+    - .parse_to_JSON()
+
+* Parse CSV-like string and convert it to an array of dictionaries (without exporting it).
+1. Run the .text_to_array_of_dicts method.
+    - You must pass a string as the first argument.
+    - Optionally, you may add headers (under the assumption there is no existing line with headers in the file) by passing a list of strings. Not used by default.
     - Optionally, you may define the character to be used to seperate on, by passing a string. Comma (",") is used by default.
-    - Optionally, you may define what characters are read as quotation marks. Single and double quotes (["'", '""]) by default.
+    - Optionally, you may define what characters are read as quotation marks. Single and double quotes (["'", '""]) are used by default.
 
 ```
-parser.parse_to_JSON(<input file location>, <output file destination>)
+array = parserObj.text_to_array_of_dicts(<string in CSV format>)
 ```
+
+* If you want to directly convert a file to its corresponding JSON array (in the fewest possible steps) in Python:
+1. Run the .parse_to_JSON method. 
+    - You must pass the following two arguments: The path to the input file (as a string), the path for the output JSON-file including its file name (as a string).
+    - In addition you have the same three optional arguments as for the .text_to_array_of_dicts method.
+    
+```
+parserObj.parse_to_JSON(<input file location>, <output file destination>)
+```
+### Executing program
+
+* How to run the program
+* Step-by-step bullets
+```
+parserObj = Parser() # Initialize an instance of the Parser class
+
+parserObj.load(<path to CSV formated file>) # 
+```
+
 
 ### Dependencies
 
@@ -43,17 +63,15 @@ parser.parse_to_JSON(<input file location>, <output file destination>)
 
 ### Installing
 
-* Download or clone this repository.
-* Your "main.py"-file must be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files.
+* Download or clone this repository[^1].
+* Place the csvparser subdirectory in your work environment of choice. 
+* Your "main.py"-file must be stored in the same directory as your "fileHandling.py" and "stringHandling.py"-files, like they are in this directory by default[^2].
+* 
+
+[^1]: It might be possible to install as a package in the future. However if so, expect this section to be updated accordingly.
+[^2]: You may choose to disregard the tests subdirectory. However it may confirm whether everything runs as intended.
 
 
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
 
 ## Help
 

@@ -1,16 +1,8 @@
-
-#import sys
-#sys.path.insert(0, "../src")
-
 import unittest
 from unittest import mock # patch, call, mock_open
-#import coverage
-from parser.main import Parser
-from parser.stringHandling import StringHandler
-#from parser.fileHandling import FileHandler
 import os
-import pathlib
-
+from csvparser.main import Parser
+from csvparser.stringHandling import StringHandler
 
 
 class TestParser(unittest.TestCase):
