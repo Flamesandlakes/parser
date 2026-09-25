@@ -48,9 +48,9 @@ Parser<i>.parse_to_JSON</i>: If you want to directly convert a file to its corre
 ```
 parserObj.parse_to_JSON(<input file location>, <output file destination>)
 ```
-## Software structure
+## Software overview
 
-![Class UML for the Parser and its inheritance](UML Class diagram_for Parser.class.png)
+![Class UML for the Parser and its inheritance](https://github.com/flamesandlakes/paser/UML Class diagram_for Parser.class.png)
 
 The Parser class inherits methods pertaining to file handling and basic string operations.
 
