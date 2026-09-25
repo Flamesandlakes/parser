@@ -50,7 +50,7 @@ parserObj.parse_to_JSON(<input file location>, <output file destination>)
 ```
 ## Software overview
 
-![Class UML for the Parser and its inheritance](https://github.com/flamesandlakes/parser/images/UML_Class_diagram_for_Parser_class.png)
+![Class UML for the Parser and its inheritance](https://github.com/Flamesandlakes/parser/blob/main/images/UML_Class_diagram_for_Parser_class.png)
 
 The Parser class inherits methods pertaining to file handling and basic string operations.
 
